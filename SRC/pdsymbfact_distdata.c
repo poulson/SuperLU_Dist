@@ -1189,11 +1189,9 @@ ddist_psymbtonum(fact_t fact, int_t n, SuperMatrix *A,
   int_t nrbu; /* number of U blocks in current block column */
   int_t gb;   /* global block number; 0 < gb <= nsuper */
   int_t lb;   /* local block number; 0 < lb <= ceil(NSUPERS/Pr) */
-  int iam, jbrow, jbcol, jcol, kcol, mycol, myrow, pc, pr, ljb_i, ljb_j, p;
+  int iam, jbrow, jbcol, jcol, mycol, myrow, pc, pr, ljb_i, ljb_j, p;
   int_t mybufmax[NBUFFERS];
   NRformat_loc *Astore;
-  double *a;
-  int_t *asub, *xa;
   int_t *ainf_colptr, *ainf_rowind, *asup_rowptr, *asup_colind;
   double *asup_val, *ainf_val;
   int_t *xsup, *supno;    /* supernode and column mapping */

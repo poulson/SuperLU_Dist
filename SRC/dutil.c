@@ -139,7 +139,7 @@ void dPrint_CompCol_Matrix_dist(SuperMatrix *A)
     printf("\nCompCol matrix: ");
     printf("Stype %d, Dtype %d, Mtype %d\n", A->Stype,A->Dtype,A->Mtype);
     Astore = (NCformat *) A->Store;
-    printf("nrow %ld, ncol %ld, nnz %ld\n", (long long) A->nrow,
+    printf("nrow %lld, ncol %lld, nnz %lld\n", (long long) A->nrow,
 	    (long long) A->ncol, (long long) Astore->nnz);
     if ( (dp = (double *) Astore->nzval) != NULL ) {
         printf("nzval:\n");
@@ -147,10 +147,10 @@ void dPrint_CompCol_Matrix_dist(SuperMatrix *A)
     }
     printf("\nrowind:\n");
     for (i = 0; i < Astore->nnz; ++i) 
-        printf("%ld  ", (long long) Astore->rowind[i]);
+        printf("%lld  ", (long long) Astore->rowind[i]);
     printf("\ncolptr:\n");
     for (i = 0; i <= A->ncol; ++i) 
-        printf("%ld  ", (long long) Astore->colptr[i]);
+        printf("%lld  ", (long long) Astore->colptr[i]);
     printf("\nend CompCol matrix.\n");
 }
 

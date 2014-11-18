@@ -253,7 +253,7 @@ FormFullA(int_t n, int_t *nonz, double **nzval, int_t **rowind, int_t **colptr)
       a_colptr[j+1] = k;
     }
 
-    printf("FormFullA: new_nnz = %ld, k = %ld\n", (long long) new_nnz, (long long)k);
+    printf("FormFullA: new_nnz = %lld, k = %lld\n", (long long) new_nnz, (long long)k);
 
     SUPERLU_FREE(al_val);
     SUPERLU_FREE(al_rowind);

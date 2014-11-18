@@ -109,11 +109,11 @@ dist_symbLU (int_t n, Pslu_freeable_t *Pslu_freeable,
   int_t *globToLoc, nvtcs_loc;
   int_t SendCnt_l, SendCnt_u, nnz_loc_l, nnz_loc_u, nnz_loc,
     RecvCnt_l, RecvCnt_u, ind_loc;
-  int_t i, k, j, gb, szsn, gb_n, gb_s, gb_l, fst_s, fst_s_l, lst_s, i_loc;
+  int_t i, k, j, gb, szsn, gb_n, gb_s, gb_l, fst_s, fst_s_l, i_loc;
   int_t nelts, isize;
   float memAux;  /* Memory used during this routine and freed on return */
   float memRet; /* Memory allocated and not freed on return */
-  int_t iword, dword;
+  int_t iword;
   
   /* ------------------------------------------------------------
      INITIALIZATION.
@@ -133,7 +133,6 @@ dist_symbLU (int_t n, Pslu_freeable_t *Pslu_freeable,
   supno_s       = Pslu_freeable->supno_loc;
   rcv_luind     = NULL;
   iword = sizeof(int_t);
-  dword = sizeof(doublecomplex);
   memAux = 0.; memRet = 0.;
   
   mem           = intCalloc_dist(12 * nprocs);
@@ -282,7 +281,6 @@ dist_symbLU (int_t n, Pslu_freeable_t *Pslu_freeable,
       i_loc = LOCAL_IND( globToLoc[i] );
       gb_s  = supno_s[i_loc];
       fst_s = xsup_beg_s[gb_s];
-      lst_s = xsup_end_s[gb_s];
       fst_s_l = LOCAL_IND( globToLoc[fst_s] );
       for (j = xlsub_s[fst_s_l]; j < xlsub_s[fst_s_l+1]; j++) {
 	k = lsub_s[j];
@@ -420,7 +418,6 @@ dist_symbLU (int_t n, Pslu_freeable_t *Pslu_freeable,
 	i_loc = LOCAL_IND( globToLoc[i] );
 	gb_s  = supno_s[i_loc];
 	fst_s = xsup_beg_s[gb_s];
-	lst_s = xsup_end_s[gb_s];
 	fst_s_l = LOCAL_IND( globToLoc[fst_s] );
 
 	if (sendL) {
@@ -1179,20 +1176,14 @@ zdist_psymbtonum(fact_t fact, int_t n, SuperMatrix *A,
 		LUstruct_t *LUstruct, gridinfo_t *grid)
 {
   Glu_persist_t *Glu_persist = LUstruct->Glu_persist;
-  Glu_freeable_t Glu_freeable_n;
   LocalLU_t *Llu = LUstruct->Llu;
-  int_t bnnz, fsupc, i, irow, istart, j, jb, jj, k, 
-    len, len1, nsupc, nsupc_gb, ii, nprocs;
-  int_t ljb;  /* local block column number */
+  int_t fsupc, i, irow, j, jb, jj, k, len, len1, nsupc, ii, nprocs;
   int_t nrbl; /* number of L blocks in current block column */
   int_t nrbu; /* number of U blocks in current block column */
   int_t gb;   /* global block number; 0 < gb <= nsuper */
   int_t lb;   /* local block number; 0 < lb <= ceil(NSUPERS/Pr) */
-  int iam, jbrow, jbcol, jcol, kcol, mycol, myrow, pc, pr, ljb_i, ljb_j, p;
+  int iam, jbrow, jbcol, jcol, mycol, myrow, pc, pr, ljb_i, ljb_j, p;
   int_t mybufmax[NBUFFERS];
-  NRformat_loc *Astore;
-  doublecomplex *a;
-  int_t *asub, *xa;
   int_t *ainf_colptr, *ainf_rowind, *asup_rowptr, *asup_colind;
   doublecomplex *asup_val, *ainf_val;
   int_t *xsup, *supno;    /* supernode and column mapping */
@@ -1261,7 +1252,6 @@ zdist_psymbtonum(fact_t fact, int_t n, SuperMatrix *A,
   mycol = MYCOL( iam, grid );
   nprocs = grid->npcol * grid->nprow;
   for (i = 0; i < NBUFFERS; ++i) mybufmax[i] = 0;
-  Astore   = (NRformat_loc *) A->Store;
   
   iword = sizeof(int_t);
   dword = sizeof(doublecomplex);

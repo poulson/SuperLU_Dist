@@ -31,6 +31,7 @@
 #include <mpi.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <limits.h>
 
 
@@ -583,6 +584,10 @@ struct pair
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+extern int SUPERLU_BLAS(xerbla)( char*, int* );
+extern float SUPERLU_LAPACK(slamch)( const char* );
+extern double SUPERLU_LAPACK(dlamch)( const char* );
 
 extern void   set_default_options_dist(superlu_options_t *);
 extern void   superlu_gridinit(MPI_Comm, int_t, int_t, gridinfo_t *);

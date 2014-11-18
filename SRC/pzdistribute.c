@@ -367,7 +367,6 @@ pzdistribute(fact_t fact, int_t n, SuperMatrix *A,
     int_t lb;   /* local block number; 0 < lb <= ceil(NSUPERS/Pr) */
     int iam, jbrow, kcol, mycol, myrow, pc, pr;
     int_t mybufmax[NBUFFERS];
-    NRformat_loc *Astore;
     doublecomplex *a;
     int_t *asub, *xa;
     int_t *xsup = Glu_persist->xsup;    /* supernode and column mapping */
@@ -432,7 +431,6 @@ pzdistribute(fact_t fact, int_t n, SuperMatrix *A,
     mycol = MYCOL( iam, grid );
     for (i = 0; i < NBUFFERS; ++i) mybufmax[i] = 0;
     nsupers  = supno[n-1] + 1;
-    Astore   = (NRformat_loc *) A->Store;
 
 #if ( PRNTlevel>=1 )
     iword = sizeof(int_t);
