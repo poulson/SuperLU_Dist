@@ -679,13 +679,13 @@ pdgssvx(superlu_options_t *options, SuperMatrix *A,
 	    /* Equilibrate matrix A if it is badly-scaled. */
 	    pdlaqgs(A, R, C, rowcnd, colcnd, amax, equed);
 
-	    if ( lsame_(equed, "R") ) {
+	    if ( toupper(*equed) == 'R' ) {
 		ScalePermstruct->DiagScale = ROW;
 		rowequ = ROW;
-	    } else if ( lsame_(equed, "C") ) {
+	    } else if ( toupper(*equed) == 'C' ) {
 		ScalePermstruct->DiagScale = COL;
 		colequ = COL;
-	    } else if ( lsame_(equed, "B") ) {
+	    } else if ( toupper(*equed) == 'B' ) {
 		ScalePermstruct->DiagScale = BOTH;
 		rowequ = ROW;
 		colequ = COL;
@@ -772,7 +772,7 @@ pdgssvx(superlu_options_t *options, SuperMatrix *A,
 	            }
 
 #if ( PRNTlevel>=2 )
-	            dmin = dlamch_("Overflow");
+	            dmin = SUPERLU_LAPACK(dlamch)("Overflow");
 	            dsum = 0.0;
 	            dprod = 1.0;
 #endif
@@ -861,8 +861,8 @@ pdgssvx(superlu_options_t *options, SuperMatrix *A,
 
     if ( !factored || options->IterRefine ) {
 	/* Compute norm(A), which will be used to adjust small diagonal. */
-	if ( notran ) *(unsigned char *)norm = '1';
-	else *(unsigned char *)norm = 'I';
+	if ( notran ) *norm = '1';
+	else *norm = 'I';
 	anorm = pdlangs(norm, A, grid);
 #if ( PRNTlevel>=1 )
 	if ( !iam ) printf(".. anorm %e\n", anorm);

@@ -160,7 +160,7 @@ pzgsrfs_ABXglobal(int_t n, SuperMatrix *A, double anorm, LUstruct_t *LUstruct,
     else if ( nrhs < 0 ) *info = -13;
     if (*info != 0) {
 	i = -(*info);
-	xerbla_("pzgsrfs_ABXglobal", &i);
+	SUPERLU_BLAS(xerbla)("pzgsrfs_ABXglobal", &i);
 	return;
     }
 

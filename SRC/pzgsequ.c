@@ -95,7 +95,7 @@ pzgsequ(SuperMatrix *A, double *r, double *c, double *rowcnd,
 	*info = -1;
     if (*info != 0) {
 	i = -(*info);
-	xerbla_("pzgsequ", &i);
+	SUPERLU_BLAS(xerbla)("pzgsequ", &i);
 	return;
     }
 

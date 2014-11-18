@@ -96,7 +96,7 @@ sp_ienv_dist(int_t ispec)
 
     /* Invalid value for ISPEC */
     i = 1;
-    xerbla_("sp_ienv", &i);
+    SUPERLU_BLAS(xerbla)("sp_ienv", &i);
     return 0;
 
 

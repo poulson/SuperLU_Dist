@@ -79,13 +79,12 @@ zlaqgs_dist(SuperMatrix *A, double *r, double *c,
     doublecomplex   *Aval;
     int i, j, irow;
     double large, small, cj;
-    /*extern double dlamch_(char *);*/
     double temp;
 
 
     /* Quick return if possible */
     if (A->nrow <= 0 || A->ncol <= 0) {
-	*(unsigned char *)equed = 'N';
+	*equed = 'N';
 	return;
     }
 
@@ -93,12 +92,13 @@ zlaqgs_dist(SuperMatrix *A, double *r, double *c,
     Aval = (doublecomplex *) Astore->nzval;
     
     /* Initialize LARGE and SMALL. */
-    small = dlamch_("Safe minimum") / dlamch_("Precision");
+    small = SUPERLU_LAPACK(dlamch)("Safe minimum") / 
+            SUPERLU_LAPACK(dlamch)("Precision");
     large = 1. / small;
 
     if (rowcnd >= THRESH && amax >= small && amax <= large) {
 	if (colcnd >= THRESH)
-	    *(unsigned char *)equed = 'N';
+	    *equed = 'N';
 	else {
 	    /* Column scaling */
 	    for (j = 0; j < A->ncol; ++j) {
@@ -107,7 +107,7 @@ zlaqgs_dist(SuperMatrix *A, double *r, double *c,
 		    zd_mult(&Aval[i], &Aval[i], cj);
                 }
 	    }
-	    *(unsigned char *)equed = 'C';
+	    *equed = 'C';
 	}
     } else if (colcnd >= THRESH) {
 	/* Row scaling, no column scaling */
@@ -116,7 +116,7 @@ zlaqgs_dist(SuperMatrix *A, double *r, double *c,
 		irow = Astore->rowind[i];
 		zd_mult(&Aval[i], &Aval[i], r[irow]);
 	    }
-	*(unsigned char *)equed = 'R';
+	*equed = 'R';
     } else {
 	/* Row and column scaling */
 	for (j = 0; j < A->ncol; ++j) {
@@ -127,7 +127,7 @@ zlaqgs_dist(SuperMatrix *A, double *r, double *c,
 		zd_mult(&Aval[i], &Aval[i], temp);
 	    }
 	}
-	*(unsigned char *)equed = 'B';
+	*equed = 'B';
     }
 
     return;

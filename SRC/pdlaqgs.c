@@ -87,7 +87,7 @@ pdlaqgs(SuperMatrix *A, double *r, double *c,
 
     /* Quick return if possible */
     if (A->nrow <= 0 || A->ncol <= 0) {
-	*(unsigned char *)equed = 'N';
+	*equed = 'N';
 	return;
     }
 
@@ -101,7 +101,7 @@ pdlaqgs(SuperMatrix *A, double *r, double *c,
 
     if (rowcnd >= THRESH && amax >= small && amax <= large) {
 	if (colcnd >= THRESH)
-	    *(unsigned char *)equed = 'N';
+	    *equed = 'N';
 	else {
 	    /* Column scaling */
 	    irow = Astore->fst_row;
@@ -112,7 +112,7 @@ pdlaqgs(SuperMatrix *A, double *r, double *c,
 	      }
 	      ++irow;
 	    }
-	    *(unsigned char *)equed = 'C';
+	    *equed = 'C';
 	}
     } else if (colcnd >= THRESH) {
 	/* Row scaling, no column scaling */
@@ -122,7 +122,7 @@ pdlaqgs(SuperMatrix *A, double *r, double *c,
 	        Aval[j] *= r[irow];
 	    ++irow;
 	}
-	*(unsigned char *)equed = 'R';
+	*equed = 'R';
     } else {
 	/* Both row and column scaling */
 	irow = Astore->fst_row;
@@ -133,7 +133,7 @@ pdlaqgs(SuperMatrix *A, double *r, double *c,
 	    }
 	    ++irow;
 	}
-	*(unsigned char *)equed = 'B';
+	*equed = 'B';
     }
 
     return;

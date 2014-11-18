@@ -448,7 +448,7 @@ pzgstrf(superlu_options_t * options, int m, int n, double anorm,
     mycol = MYCOL (iam, grid);
     nsupers = Glu_persist->supno[n - 1] + 1;
     xsup = Glu_persist->xsup;
-    s_eps = slamch_ ("Epsilon");
+    s_eps = SUPERLU_LAPACK(slamch)("Epsilon");
     thresh = s_eps * anorm;
 
     MPI_Attr_get (MPI_COMM_WORLD, MPI_TAG_UB, &attr_val, &flag);

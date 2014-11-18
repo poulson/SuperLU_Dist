@@ -90,7 +90,7 @@ zgsequ_dist(SuperMatrix *A, double *r, double *c, double *rowcnd,
 	*info = -1;
     if (*info != 0) {
 	i = -(*info);
-	xerbla_("zgsequ_dist", &i);
+	SUPERLU_BLAS(xerbla)("zgsequ_dist", &i);
 	return;
     }
 

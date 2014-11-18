@@ -70,7 +70,7 @@ double pdlangs(char *norm, SuperMatrix *A, gridinfo_t *grid)
     
     if ( SUPERLU_MIN(A->nrow, A->ncol) == 0) {
 	value = 0.;
-    } else if (lsame_(norm, "M")) {
+    } else if (toupper(*norm) == 'M') {
 	/* Find max(abs(A(i,j))). */
 	value = 0.;
 	for (i = 0; i < m_loc; ++i) {
@@ -81,7 +81,7 @@ double pdlangs(char *norm, SuperMatrix *A, gridinfo_t *grid)
 	MPI_Allreduce(&value, &tempvalue, 1, MPI_DOUBLE, MPI_MAX, grid->comm);
 	value = tempvalue;
 
-    } else if (lsame_(norm, "O") || *(unsigned char *)norm == '1') {
+    } else if (toupper(*norm) == 'O' || *norm == '1') {
 	/* Find norm1(A). */
 	value = 0.;
 #if 0
@@ -111,7 +111,7 @@ double pdlangs(char *norm, SuperMatrix *A, gridinfo_t *grid)
 	SUPERLU_FREE (temprwork);
 	SUPERLU_FREE (rwork);
 #endif	
-    } else if (lsame_(norm, "I")) {
+    } else if (toupper(*norm) == 'I') {
 	/* Find normI(A). */
 	value = 0.;
 	sum = 0.;
@@ -123,7 +123,7 @@ double pdlangs(char *norm, SuperMatrix *A, gridinfo_t *grid)
 	MPI_Allreduce(&value, &tempvalue, 1, MPI_DOUBLE, MPI_MAX, grid->comm);
 	value = tempvalue;
 
-    } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
+    } else if (toupper(*norm) == 'F' || toupper(*norm) == 'E') {
 	/* Find normF(A). */
 	ABORT("Not implemented.");
     } else {

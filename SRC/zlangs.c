@@ -63,14 +63,14 @@ double zlangs_dist(char *norm, SuperMatrix *A)
     if ( SUPERLU_MIN(A->nrow, A->ncol) == 0) {
 	value = 0.;
 	
-    } else if (lsame_(norm, "M")) {
+    } else if (toupper(*norm) == 'M') {
 	/* Find max(abs(A(i,j))). */
 	value = 0.;
 	for (j = 0; j < A->ncol; ++j)
 	    for (i = Astore->colptr[j]; i < Astore->colptr[j+1]; i++)
 		value = SUPERLU_MAX( value, slud_z_abs( &Aval[i]) );
 	
-    } else if (lsame_(norm, "O") || *(unsigned char *)norm == '1') {
+    } else if (toupper(*norm) == 'O' || *norm == '1') {
 	/* Find norm1(A). */
 	value = 0.;
 	for (j = 0; j < A->ncol; ++j) {
@@ -80,7 +80,7 @@ double zlangs_dist(char *norm, SuperMatrix *A)
 	    value = SUPERLU_MAX(value,sum);
 	}
 	
-    } else if (lsame_(norm, "I")) {
+    } else if (toupper(*norm) == 'I') {
 	/* Find normI(A). */
 	if ( !(rwork = (double *) SUPERLU_MALLOC(A->nrow * sizeof(double))) )
 	    ABORT("SUPERLU_MALLOC fails for rwork.");
@@ -96,7 +96,7 @@ double zlangs_dist(char *norm, SuperMatrix *A)
 	
 	SUPERLU_FREE (rwork);
 	
-    } else if (lsame_(norm, "F") || lsame_(norm, "E")) {
+    } else if (toupper(*norm) == 'F' || toupper(*norm) == 'E') {
 	/* Find normF(A). */
 	ABORT("Not implemented.");
     } else

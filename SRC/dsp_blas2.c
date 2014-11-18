@@ -101,14 +101,14 @@ sp_dtrsv_dist(char *uplo, char *trans, char *diag, SuperMatrix *L,
 
     /* Test the input parameters */
     *info = 0;
-    if ( !lsame_(uplo,"L") && !lsame_(uplo, "U") ) *info = -1;
-    else if ( !lsame_(trans, "N") && !lsame_(trans, "T") ) *info = -2;
-    else if ( !lsame_(diag, "U") && !lsame_(diag, "N") ) *info = -3;
+    if ( toupper(*uplo) != 'L' && toupper(*uplo) != 'U' ) *info = -1;
+    else if ( toupper(*trans) != 'N' && toupper(*trans) != 'T' ) *info = -2;
+    else if ( toupper(*diag) != 'U' && toupper(*diag) != 'N' ) *info = -3;
     else if ( L->nrow != L->ncol || L->nrow < 0 ) *info = -4;
     else if ( U->nrow != U->ncol || U->nrow < 0 ) *info = -5;
     if ( *info ) {
 	i = -(*info);
-	xerbla_("sp_dtrsv_dist", &i);
+	SUPERLU_BLAS(xerbla)("sp_dtrsv_dist", &i);
 	return 0;
     }
 
@@ -121,9 +121,9 @@ sp_dtrsv_dist(char *uplo, char *trans, char *diag, SuperMatrix *L,
     if ( !(work = doubleCalloc_dist(L->nrow)) )
 	ABORT("Malloc fails for work in sp_dtrsv_dist().");
     
-    if ( lsame_(trans, "N") ) {	/* Form x := inv(A)*x. */
+    if ( toupper(*trans) == 'N' ) {	/* Form x := inv(A)*x. */
 	
-	if ( lsame_(uplo, "L") ) {
+	if ( toupper(*uplo) == 'L' ) {
 	    /* Form x := inv(L)*x */
     	    if ( L->nrow == 0 ) return 0; /* Quick return */
 	    
@@ -227,7 +227,7 @@ sp_dtrsv_dist(char *uplo, char *trans, char *diag, SuperMatrix *L,
 	}
     } else { /* Form x := inv(A')*x */
 	
-	if ( lsame_(uplo, "L") ) {
+	if ( toupper(*uplo) == 'L' ) {
 	    /* Form x := inv(L')*x */
     	    if ( L->nrow == 0 ) return 0; /* Quick return */
 	    
@@ -392,18 +392,18 @@ sp_dgemv_dist(char *trans, double alpha, SuperMatrix *A, double *x,
     int iy, jx, jy, kx, ky;
     int notran;
 
-    notran = lsame_(trans, "N");
+    notran = toupper(*trans) == 'N';
     Astore = (NCformat *) A->Store;
     Aval = (double *) Astore->nzval;
     
     /* Test the input parameters */
     info = 0;
-    if ( !notran && !lsame_(trans, "T") && !lsame_(trans, "C")) info = 1;
+    if ( !notran && toupper(*trans) != 'T' && toupper(*trans) != 'C') info = 1;
     else if ( A->nrow < 0 || A->ncol < 0 ) info = 3;
     else if (incx == 0) info = 5;
     else if (incy == 0)	info = 8;
     if (info != 0) {
-	xerbla_("sp_dgemv_dist ", &info);
+	SUPERLU_BLAS(xerbla)("sp_dgemv_dist ", &info);
 	return 0;
     }
 
@@ -413,7 +413,7 @@ sp_dgemv_dist(char *trans, double alpha, SuperMatrix *A, double *x,
 
     /* Set  LENX  and  LENY, the lengths of the vectors x and y, and set 
        up the start points in  X  and  Y. */
-    if (lsame_(trans, "N")) {
+    if (toupper(*trans) == 'N') {
 	lenx = A->ncol;
 	leny = A->nrow;
     } else {
