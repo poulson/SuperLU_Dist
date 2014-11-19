@@ -1180,11 +1180,8 @@ ddist_psymbtonum(fact_t fact, int_t n, SuperMatrix *A,
 		LUstruct_t *LUstruct, gridinfo_t *grid)
 {
   Glu_persist_t *Glu_persist = LUstruct->Glu_persist;
-  Glu_freeable_t Glu_freeable_n;
   LocalLU_t *Llu = LUstruct->Llu;
-  int_t bnnz, fsupc, i, irow, istart, j, jb, jj, k, 
-    len, len1, nsupc, nsupc_gb, ii, nprocs;
-  int_t ljb;  /* local block column number */
+  int_t fsupc, i, irow, j, jb, jj, k, len, len1, nsupc, ii, nprocs;
   int_t nrbl; /* number of L blocks in current block column */
   int_t nrbu; /* number of U blocks in current block column */
   int_t gb;   /* global block number; 0 < gb <= nsuper */
